@@ -4,7 +4,7 @@ from django.contrib import messages   # for display flash message on page
 # index method will be called from url.py
 # it render templates   new_user/index.html .
 def index(request):
-    if users not in request.session:
+    if "users" not in request.session:
         request.session["users"] = []  # if its first time user access this website, then we initiate session array
     return render(request,"users/index.html")
 
@@ -14,11 +14,12 @@ if get or post yourself
 '''
 def users(request):
     if request.method == "POST":
-        messages.info(request,"")
+        #messages.info(request,"")
         new_user = {
-            "email":request.POST.get("email"),
-            "first_name":request.POST.get("first_name"),
+            "gender":request.POST.get("gender"),
+            "first_name":request.POST.get("fist_name"),
             "last_name":request.POST.get("last_name"),
+            "email":request.POST.get("email"),
             "password":request.POST.get("password")
         } # because there is no data, create empty dict to store some fake user
         #new_user["email"] = request.POST.get("email") # we create data first
@@ -45,7 +46,9 @@ def users(request):
                 messages.error(request, "Email already used!")
 
         if valid == True: 
-            request.session["users"].append(new_user)
+            users = request.session["users"]
+            users.append(new_user)
+            request.session["users"] = users # lets try 
             # IMPORTANT:  request.session is dictionary,  users is array
             request.session.modified = True
             messages.success(request,"Registered a user successfully!") # standard way of show success message
@@ -56,10 +59,18 @@ def users(request):
         #print("This is get method!")
 
 def all_users(request):
+    current_users = request.session["users"]
     context = {
-        "users":request.session["users"]
+        "users":current_users
     }
     return render(request, "users/all_users.html", context)
 
-
-    
+## remember it takes a parameter called email
+def show(request,email):
+    for user in request.session["users"]:
+        if user["email"] == email:
+            current_user = user
+    context = {
+        "current_user":current_user
+    }
+    return render(request, "users/show.html", context)

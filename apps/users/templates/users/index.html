@@ -21,11 +21,13 @@
     {% endif %}
     <form action="/users" method="POST">
         {% csrf_token %}
-        <input type="text" name="fist_name" id="" placeholder="first name">
-        <input type="text" name="last_name" id="" placeholder="last name">
-        <input type="text" name="email" id="" placeholder="email">
-        <input type="text" name="password" id="" placeholder="password">
-        <input type="submit" value="Add User" id="">
+        <input type="text" name="fist_name" placeholder="first name">
+        <input type="text" name="last_name" placeholder="last name">
+        <input type="text" name="email" placeholder="email">
+        <input type="text" name="password" placeholder="password">
+        male<input type="radio" name="gender" value="male">
+        female<input type="radio" name="gender" value="female">
+        <input type="submit" value="Add User">
     </form>
 
     <a href="/all_users">Show All Users</a> 
